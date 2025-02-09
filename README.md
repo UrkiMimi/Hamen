@@ -7,6 +7,8 @@ These scripts help make Beat Saber maps that take advantage of the Heck mod. Chr
 
 ## Usage
 Change the `fileName` variable in `heckNoodle.py` to the diff name you're editing. Then edit the `exportName` variable to the diff name you're exporting it to. Lastly, import these scripts like you would with any other library. You must have them in the same folder as your `.py` file. 
+
+## Example
 ```python
 ### example.py
 import json
