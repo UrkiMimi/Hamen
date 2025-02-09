@@ -7,7 +7,7 @@ import math
 from copy import deepcopy
 import json
 
-fileName = 'ExpertPlusNoArrows.dat' # Map to appl scripts to
+fileName = 'ExpertPlusNoArrows.dat' # Map to apply scripts to
 
 exFile = open(fileName, 'r')
 exData = json.loads(exFile.read())

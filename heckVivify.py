@@ -133,7 +133,7 @@ def assignObjectPrefab(nTime, loadMode, objectName, contents = {}):
 
     exData['customData']['customEvents'].append(dict(b=nTime, t='AssignObjectPrefab', d=cData))
 
-def InstantiatePrefab(nTime, asset, id=None, track=None, position=[0,0,0], localPosition=[0,0,0], rotation=[0,0,0], localRotation=[0,0,0], scale=[0,0,0]):
+def InstantiatePrefab(nTime, asset, id=None, track=None, position=[0,0,0], localPosition=[0,0,0], rotation=[0,0,0], localRotation=[0,0,0], scale=[1,1,1]):
     # custom data
     cData = {}
     cData['asset'] = asset
@@ -164,3 +164,7 @@ def destroyObject(nTime, id):
     cData['id'] = id
     
     exData['customData']['customEvents'].append(dict(b=nTime, t='DestroyObject', d=cData))
+
+def loadBundleInfo(jsn):
+    with open(jsn, 'r') as k:
+        return json.loads(k.read())
