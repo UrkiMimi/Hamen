@@ -2,7 +2,7 @@
 ## Use this with asset bundle shit
 ## Refer to https://github.com/Aeroluna/Vivify when using this 
 
-from heckNoodle import *
+from Hamen import *
 from os import path, rename, remove
 
 ## start functions here

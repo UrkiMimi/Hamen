@@ -1,7 +1,7 @@
 ## Chroma based library for heck related maps.
 ## Some animation events are staying in heckNoodle cause some of this shit relies on noodle as well
 ## Specifically, most of the transformation tweens
-from heckNoodle import *
+from Hamen import *
 
 def addPrimitiveModel(type, material, position, localRotation, scale):
     """Creates a primitive model using Heck Geometry

@@ -1,23 +1,7 @@
 ### heckNoodle megascript
 ### Put new noodle scripts here and make sure its seperate from the main python file
 ### TODO, add better documentation with autoDocstring
-
-import random as rand
-import math
-from copy import deepcopy
-import json
-
-fileName = 'ExpertPlusNoArrows.dat' # Map to apply scripts to
-
-exFile = open(fileName, 'r')
-exData = json.loads(exFile.read())
-exFile.close()
-
-# unused
-def export_json(filename):
-    diPlusFile = open(filename, 'w')
-    diPlusFile.write(json.dumps(exData,indent=2))
-    diPlusFile.close()
+from Hamen import *
 
 # Assigns notes to a track
 def assignNotesToTrack(startTime, endTime, trackName, colorCheck=False):
