@@ -11,6 +11,13 @@ exData = json.loads(exFile.read())
 exFile.close()
 '''
 
+# requirement shit
+infoDat_addRequirement([
+    "Noodle Extensions",
+    "Chroma",
+    "Vivify"
+])
+infoDat_addSuggestion([])
 
 # Add arrays
 exData['customData'] = {}
@@ -28,4 +35,5 @@ scaleTween(4,'notes',2,'easeOutQuad',[1,1,1,0],[2,1,1,1])
 
 
 ### Save json to Ex+ file
-export_json()
+export_infoDat()
+export_diff()
