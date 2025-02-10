@@ -2,7 +2,7 @@
 ### Someone please give me a better name for this
 
 ## Overview
-These scripts help make Beat Saber maps that take advantage of the Heck mod. Chroma and Noodle are mostly supported with primitive Vivify support (untested)
+These scripts help make Beat Saber maps that take advantage of the Heck mod. Chroma and Noodle are mostly supported with primitive Vivify support.
 
 
 
