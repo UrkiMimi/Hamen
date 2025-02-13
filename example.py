@@ -5,12 +5,6 @@ from hamenChroma import *
 from hamenVivify import *
 from copy import deepcopy
 
-'''
-exFile = open("ExpertStandard.dat", "r")
-exData = json.loads(exFile.read())
-exFile.close()
-'''
-
 # requirement shit
 infoDat_addRequirement([
     "Noodle Extensions",
