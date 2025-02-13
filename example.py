@@ -12,6 +12,7 @@ infoDat_addRequirement([
     "Vivify"
 ])
 infoDat_addSuggestion([])
+infoDat_removeBaseMap()
 
 # Add arrays
 exData['customData'] = {}

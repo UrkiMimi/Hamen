@@ -11,7 +11,7 @@ import json, os
 infDat = {}
 
 # Map to apply scripts to
-fileName = 'ExpertPlusLawless.dat' 
+fileName = 'ExpertStandard.dat' 
 
 # Export filename
 exportName = 'ExpertPlusStandard.dat'
@@ -28,7 +28,10 @@ infFile.close()
 # for final exporting
 def export_diff():
     """Exports map
-    """
+    """        
+    # rename old diff file incase accidental overwrites
+    os.rename(exportName, exportName + '.bak')
+
     diPlusFile = open(exportName, 'w')
     diPlusFile.write(json.dumps(exData,indent=2))
     diPlusFile.close()
@@ -97,3 +100,18 @@ def infoDat_addSuggestion(suggestion):
             infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'][indexes[1]]['_customData'].pop('_suggestions')
     else:
         infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'][indexes[1]]['_customData']['_suggestion'] = suggestion
+
+def infoDat_removeBaseMap():
+    """Removes base map from Info.dat
+    Use this if you've finished mapping your base difficulty!
+    """
+    indexes = []
+    # find correct diff
+    for index in range(len(infDat['_difficultyBeatmapSets'])):
+        for index2 in range(len(infDat['_difficultyBeatmapSets'][index]['_difficultyBeatmaps'])):
+            if infDat['_difficultyBeatmapSets'][index]['_difficultyBeatmaps'][index2]['_beatmapFilename'] == fileName:
+                indexes = [index, index2]
+    
+    #pops base map
+    infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'].pop(indexes[1])
+    
