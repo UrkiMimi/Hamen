@@ -3,6 +3,9 @@
 ## Overview
 These scripts help make Beat Saber maps that take advantage of the Heck mod. Chroma and Noodle are mostly supported with primitive Vivify support.
 
+## Usage
+this shit needs a wiki at some point
+
 ## Example
 ```python
 ### example.py
