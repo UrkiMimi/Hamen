@@ -1,5 +1,6 @@
-### heckNoodle megascript
+### hamenNoodle megascript
 ### Put new noodle scripts here and make sure its seperate from the main python file
+### Refer to https://heck.aeroluna.dev/ when using this 
 ### TODO, add better documentation with autoDocstring
 from Hamen import *
 
@@ -1021,11 +1022,12 @@ def assignPlayerToTrack(nTime, trackName):
 def childrenTracks(nTime, trackName, childrens):
     exData['customData']['customEvents'].append(dict(b=nTime, t='AssignTrackParent', d={'childrenTracks':childrens, 'parentTrack':trackName}))
     
-def assignPathAnimation(nTime, trackName, duration, pos=None, worldRotation=None, localRotation=None, scale=None):
+def assignPathAnimation(nTime, trackName, duration, easings='easeLinear', pos=None, worldRotation=None, localRotation=None, scale=None):
     dat = {}
     # add essential stuff
     dat['track'] = trackName
     dat['duration'] = duration
+    dat['easing'] = easings
     
     #if statement hell
     if (pos != None):

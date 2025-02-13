@@ -1,6 +1,7 @@
 ## Chroma based library for heck related maps.
 ## Some animation events are staying in heckNoodle cause some of this shit relies on noodle as well
 ## Specifically, most of the transformation tweens
+## Refer to https://heck.aeroluna.dev/ when using this 
 from Hamen import *
 
 def addPrimitiveModel(type, material, position, localRotation, scale):
@@ -153,7 +154,7 @@ def fridgeTrack(pix, trackName, distanceFromPlayer = 12, color=[1,1,1,0]):
                     position = [(x-xLen)/2,(y-yLen)/2,distanceFromPlayer],
                     track = trackName))
 
-def clrTween(nTime, trackName, duration, easing, clr0, clr1):
+def clrTween(nTime, trackName, duration, clr0, clr1, easing='easeLinear'):
     exData['customData']['customEvents'].append(dict(b=nTime, t='AnimateTrack', d={'duration':duration, 'repeat':0}))
     exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['track'] = trackName
     clr1.append(easing)

@@ -1,6 +1,6 @@
 ## Vivify based library for heck related maps.
 ## Use this with asset bundle shit
-## Refer to https://github.com/Aeroluna/Vivify when using this 
+## Refer to https://heck.aeroluna.dev/ when using this 
 
 from Hamen import *
 from os import path, rename, remove

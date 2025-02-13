@@ -11,7 +11,7 @@ import json, os
 infDat = {}
 
 # Map to apply scripts to
-fileName = 'ExpertStandard.dat' 
+fileName = 'ExpertPlusLawless.dat' 
 
 # Export filename
 exportName = 'ExpertPlusStandard.dat'
