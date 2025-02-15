@@ -1,23 +1,8 @@
-### heckNoodle megascript
+### hamenNoodle megascript
 ### Put new noodle scripts here and make sure its seperate from the main python file
+### Refer to https://heck.aeroluna.dev/ when using this 
 ### TODO, add better documentation with autoDocstring
-
-import random as rand
-import math
-from copy import deepcopy
-import json
-
-fileName = 'ExpertPlusNoArrows.dat' # Map to apply scripts to
-
-exFile = open(fileName, 'r')
-exData = json.loads(exFile.read())
-exFile.close()
-
-# unused
-def export_json(filename):
-    diPlusFile = open(filename, 'w')
-    diPlusFile.write(json.dumps(exData,indent=2))
-    diPlusFile.close()
+from Hamen import *
 
 # Assigns notes to a track
 def assignNotesToTrack(startTime, endTime, trackName, colorCheck=False):
@@ -1037,11 +1022,12 @@ def assignPlayerToTrack(nTime, trackName):
 def childrenTracks(nTime, trackName, childrens):
     exData['customData']['customEvents'].append(dict(b=nTime, t='AssignTrackParent', d={'childrenTracks':childrens, 'parentTrack':trackName}))
     
-def assignPathAnimation(nTime, trackName, duration, pos=None, worldRotation=None, localRotation=None, scale=None):
+def assignPathAnimation(nTime, trackName, duration, easings='easeLinear', pos=None, worldRotation=None, localRotation=None, scale=None):
     dat = {}
     # add essential stuff
     dat['track'] = trackName
     dat['duration'] = duration
+    dat['easing'] = easings
     
     #if statement hell
     if (pos != None):
