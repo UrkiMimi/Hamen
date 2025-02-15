@@ -124,6 +124,88 @@ def assignEnvironmentToTrack(envName, trackName, lkMethod):
     """
     exData['customData']['environment'].append(dict(id=envName, lookupMethod=lkMethod, track=trackName))
 
+def disableObject(envId, lookupMe):
+    """Disables object in environment
+
+    Args:
+        envId (string): Environment ID
+        lookupMe (string): Lookup method
+    """
+    exData['environment'].append(dict(id=envId, lookupMethod=lookupMe,active=False))
+
+def dupe(envId, lookupMe, dupe):
+    """Duplicates object in environment
+
+    Args:
+        envId (string): Environment ID
+        lookupMe (string): Lookup method
+        dupe (int): Amount of objects to duplicate
+    """
+    exData['environment'].append(dict(id=envId, lookupMethod=lookupMe,active=False,duplicate=dupe))
+
+def fogging(envId, lookupMe, atten, offset, startY, height):
+    """Adjusts environment fog
+
+    Args:
+        envId (string): Environment ID
+        lookupMe (string): Lookup method
+        atten (float): Attenuation
+        offset (float): Fog offset
+        startY (float): Fog start Y
+        height (float): Fog height offset
+    """
+    exData['environment'].append(dict(
+        id=envId,
+        lookupMethod=lookupMe,
+        components={'BloomFogEnvironment':{'attenuation':atten,'offset':offset,'startY':startY,'height':height}}
+    ))
+
+# Customization for objects
+def editer(envId, lookupMe, pos, sc, rotation, enabled):
+    """Environment params
+
+    Args:
+        envId (string): Environment ID
+        lookupMe (string): Lookup method
+        pos (array): Position
+        sc (array): Scale
+        rotation (array): Rotation
+        enabled (bool): Enabled
+    """
+    exData['environment'].append(dict(
+        id=envId, 
+        lookupMethod=lookupMe,
+        localPosition=pos,
+        scale=sc,
+        localRotation=rotation,
+        active=enabled
+        ))
+    
+# Customization for tubelights you want to do hacky shit with
+def tubeEditer(envId, lookupMe, pos, sc, rotation, enabled, id, multi, fogMulti):
+    """Editer but for tube lights
+
+    Args:
+        envId (string): Environment ID
+        lookupMe (string): Lookup method
+        pos (array): Position
+        sc (array): Scale
+        rotation (array): Rotation
+        enabled (bool): Object enabled
+        id (int): Tube ID
+        multi (float): Tube multiplier
+        fogMulti (float): Object multiplier
+    """
+    exData['environment'].append(dict(
+        id=envId, 
+        lookupMethod=lookupMe,
+        localPosition=pos,
+        scale=sc,
+        localRotation=rotation,
+        active=enabled,
+        components={'ILightWithId':{'lightID':id},'TubeBloomPrePassLight':{'colorAlphaMultiplier':multi,'bloomFogIntensityMultiplier':fogMulti}}
+        ))
+
 def fridgeTrack(pix, trackName, distanceFromPlayer = 12, color=[1,1,1,0]):
     """Converts a B&W fridge image into geometry and assigns it to a track
 
