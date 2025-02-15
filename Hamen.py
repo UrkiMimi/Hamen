@@ -25,10 +25,17 @@ infFile = open('Info.dat', 'r')
 infDat = json.loads(infFile.read())
 infFile.close()
 
+
+
+#region functions
 # for final exporting
 def export_diff():
     """Exports map
-    """        
+    """
+    # remove old backup
+    if os.path.exists(exportName):
+        os.remove(exportName + '.bak')
+    
     # rename old diff file incase accidental overwrites
     os.rename(exportName, exportName + '.bak')
 
@@ -41,6 +48,10 @@ def export_diff():
 def export_infoDat():
     """Exports info.dat and backs it up
     """
+    # remove old backup
+    if os.path.exists('Info.dat.bak'):
+        os.remove('Info.dat.bak')
+
     # rename old info.dat
     os.rename('Info.dat', 'Info.dat.bak')
 
@@ -114,4 +125,3 @@ def infoDat_removeBaseMap():
     
     #pops base map
     infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'].pop(indexes[1])
-    

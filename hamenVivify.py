@@ -165,6 +165,19 @@ def destroyObject(nTime, id):
     
     exData['customData']['customEvents'].append(dict(b=nTime, t='DestroyObject', d=cData))
 
+def infoDat_injectCRCs(jsn):
+    """Injects CRCs into info.dat
+
+    Args:
+        jsn (json): Bundle JSON
+    """
+    infDat['_customData']['_assetBundle'] = jsn['bundleCRCs']
+
 def loadBundleInfo(jsn):
+    """Loads bundleinfo.json or equvalent
+
+    Args:
+        jsn (string): JSON filename
+    """
     with open(jsn, 'r') as k:
         return json.loads(k.read())
