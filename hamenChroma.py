@@ -14,7 +14,7 @@ def addPrimitiveModel(type, material, position, localRotation, scale):
         localRotation (array): Rotation
         scale (array): Object Scale
     """
-    exData['customData']['environment'].append(dict(
+    exData['customData']['customData']['environment'].append(dict(
         scale=scale,
         position=position,
         localRotation=localRotation,
@@ -33,7 +33,7 @@ def addPrimitiveModelTrack(type, material, position, localRotation, scale, track
         scale (array): Object Scale
         track (string): Track
     """
-    exData['customData']['environment'].append(dict(
+    exData['customData']['customData']['environment'].append(dict(
         scale=scale,
         position=position,
         localRotation=localRotation,
@@ -122,7 +122,7 @@ def assignEnvironmentToTrack(envName, trackName, lkMethod):
         trackName (string): Track
         lkMethod (string): LookUp Method [Regex, Exact, Contains, StartsWith, EndsWith]
     """
-    exData['customData']['environment'].append(dict(id=envName, lookupMethod=lkMethod, track=trackName))
+    exData['customData']['customData']['environment'].append(dict(id=envName, lookupMethod=lkMethod, track=trackName))
 
 def disableObject(envId, lookupMe):
     """Disables object in environment
@@ -131,7 +131,7 @@ def disableObject(envId, lookupMe):
         envId (string): Environment ID
         lookupMe (string): Lookup method
     """
-    exData['environment'].append(dict(id=envId, lookupMethod=lookupMe,active=False))
+    exData['customData']['environment'].append(dict(id=envId, lookupMethod=lookupMe,active=False))
 
 def dupe(envId, lookupMe, dupe):
     """Duplicates object in environment
@@ -141,7 +141,7 @@ def dupe(envId, lookupMe, dupe):
         lookupMe (string): Lookup method
         dupe (int): Amount of objects to duplicate
     """
-    exData['environment'].append(dict(id=envId, lookupMethod=lookupMe,active=False,duplicate=dupe))
+    exData['customData']['environment'].append(dict(id=envId, lookupMethod=lookupMe,active=False,duplicate=dupe))
 
 def fogging(envId, lookupMe, atten, offset, startY, height):
     """Adjusts environment fog
@@ -154,7 +154,7 @@ def fogging(envId, lookupMe, atten, offset, startY, height):
         startY (float): Fog start Y
         height (float): Fog height offset
     """
-    exData['environment'].append(dict(
+    exData['customData']['environment'].append(dict(
         id=envId,
         lookupMethod=lookupMe,
         components={'BloomFogEnvironment':{'attenuation':atten,'offset':offset,'startY':startY,'height':height}}
@@ -172,7 +172,7 @@ def editer(envId, lookupMe, pos, sc, rotation, enabled):
         rotation (array): Rotation
         enabled (bool): Enabled
     """
-    exData['environment'].append(dict(
+    exData['customData']['environment'].append(dict(
         id=envId, 
         lookupMethod=lookupMe,
         localPosition=pos,
@@ -196,7 +196,7 @@ def tubeEditer(envId, lookupMe, pos, sc, rotation, enabled, id, multi, fogMulti)
         multi (float): Tube multiplier
         fogMulti (float): Object multiplier
     """
-    exData['environment'].append(dict(
+    exData['customData']['environment'].append(dict(
         id=envId, 
         lookupMethod=lookupMe,
         localPosition=pos,
@@ -227,7 +227,7 @@ def fridgeTrack(pix, trackName, distanceFromPlayer = 12, color=[1,1,1,0]):
         for x in range(len(pix[0])):
             pixlist = pix[y][x]
             if pixlist == 'x':
-                exData['customData']['environment'].append(dict(
+                exData['customData']['customData']['environment'].append(dict(
                         geometry = {
                             'type':'Cube',
                             'material':matName
