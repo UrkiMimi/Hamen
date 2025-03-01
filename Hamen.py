@@ -33,7 +33,7 @@ def export_diff():
     """Exports map
     """
     # remove old backup
-    if os.path.exists(exportName):
+    if os.path.exists(exportName + '.bak'):
         os.remove(exportName + '.bak')
     
     # rename old diff file incase accidental overwrites

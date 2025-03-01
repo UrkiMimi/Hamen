@@ -137,11 +137,18 @@ def InstantiatePrefab(nTime, asset, id=None, track=None, position=[0,0,0], local
     # custom data
     cData = {}
     cData['asset'] = asset
-    cData['position'] = position
-    cData['localPosition'] = localPosition
-    cData['rotation'] = rotation
-    cData['localRotation'] = localRotation
-    cData['scale'] = scale
+
+    # aaaaa
+    if position != [0,0,0]:
+        cData['position'] = position
+    if localPosition != [0,0,0]:
+        cData['localPosition'] = localPosition
+    if rotation != [0,0,0]:
+        cData['rotation'] = rotation
+    if localRotation != [0,0,0]:
+        cData['localRotation'] = localRotation
+    if scale != [1,1,1]:
+        cData['scale'] = scale
 
     # optional properties
     if id != None:
