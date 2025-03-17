@@ -1,4 +1,4 @@
-# [Hamen](https://raw.githubusercontent.com/UrkiMimi/Hamen/refs/heads/main/resources/HamenBanner.png)
+# ![Hamen](https://raw.githubusercontent.com/UrkiMimi/Hamen/refs/heads/main/resources/HamenBanner.png)
 
 ## Overview
 A Python framework to aid in creation of Beat Saber modcharts. This has support for Heck libaries Noodle, Chroma, and Vivify.
