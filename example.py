@@ -1,5 +1,6 @@
 ### Basic preperation stuff
 import json
+from Hamen import *
 from hamenNoodle import *
 from hamenChroma import *
 from hamenVivify import *
