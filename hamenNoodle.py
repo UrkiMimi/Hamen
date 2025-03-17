@@ -619,6 +619,18 @@ def lazyOffset(startTime, endTime, offset):
             exData['customData']['fakeColorNotes'][index]['customData']['noteJumpStartBeatOffset'] = offset
             exData['customData']['fakeColorNotes'][index]['customData']['disableNoteGravity'] = True 
 
+def lazyNJS(startTime, endTime, jumpspeed):
+    for index in range(len(exData['colorNotes'])):
+        if (startTime <= exData['colorNotes'][index]['b']) and (endTime >= exData['colorNotes'][index]['b']):
+            if not('customData' in exData['colorNotes'][index]):
+                exData['colorNotes'][index]['customData'] = {}
+            exData['colorNotes'][index]['customData']['noteJumpMovementSpeed'] = jumpspeed
+    for index in range(len(exData['customData']['fakeColorNotes'])):
+        if (startTime <= exData['customData']['fakeColorNotes'][index]['b']) and (endTime >= exData['customData']['fakeColorNotes'][index]['b']):
+            if not('customData' in exData['customData']['fakeColorNotes'][index]):
+                exData['customData']['fakeColorNotes'][index]['customData'] = {}
+            exData['customData']['fakeColorNotes'][index]['customData']['noteJumpMovementSpeed'] = jumpspeed
+
 # Use only for environment tracks
 def posTween(nTime, trackName, duration, easing, oldPosVector, posVector):
     exData['customData']['customEvents'].append(dict(b=nTime, t='AnimateTrack', d={'duration':duration, 'repeat':0}))
@@ -740,6 +752,7 @@ def spawnFakeNotesWithTrackAt(startTime, endTime, disableGravity, timeOffset, tr
             if not(track == ''):
                 exData['customData']['fakeColorNotes'][fakeLen]['customData']['track'] = track
             exData['customData']['fakeColorNotes'][fakeLen]['customData']['spawnEffect'] = False
+            exData['customData']['fakeColorNotes'][fakeLen]['customData']['disableDebris'] = False
             if disableGravity:
                 exData['customData']['fakeColorNotes'][fakeLen]['customData']['disableNoteGravity'] = True
 
@@ -1206,14 +1219,14 @@ def dissolveBoth(nTime, trackName, duration, oldx,x):
         [x,1]
     ]
 
-def thinkFastChucklenuts(startTime, endTime, distance=5):
+def thinkFastChucklenuts(startTime, endTime, distance=5, beatOffset=3):
     for index in range(len(exData['colorNotes'])):
         if (exData['colorNotes'][index]['b'] >= startTime) and (exData['colorNotes'][index]['b'] <= endTime):
             if not('customData' in exData['colorNotes'][index]):
                 exData['colorNotes'][index]['customData'] = {}
             if not('animation' in exData['colorNotes'][index]['customData']):
                 exData['colorNotes'][index]['customData']['animation'] = {}
-            exData['colorNotes'][index]['customData']['noteJumpStartBeatOffset'] = 3
+            exData['colorNotes'][index]['customData']['noteJumpStartBeatOffset'] = beatOffset
             exData['colorNotes'][index]['customData']['noteJumpMovementSpeed'] = 0.01
             exData['colorNotes'][index]['customData']['disableNoteLook'] = True
             exData['colorNotes'][index]['customData']['disableNoteGravity'] = True
@@ -1312,3 +1325,61 @@ def spawnFakeNotesWithSpiral(startTime, endTime, timeSig, spiralOffset = [0,0,0]
 
         # add customData to note
         exData['customData']['fakeColorNotes'][fIndex]['customData'] = nData
+    
+def rotationRandC1Knockoff(startTime, endTime, offset = 6, track=None):
+    """Makes world and local rotation go to random positions at beginning of lifetime
+
+    Args:
+        startTime (float): Start time in beats
+        endTime (float): End time in beats
+        offset (float, optional): Note offset. Defaults to 6.
+        track (string, optional): Track name. Defaults to None.
+    """
+    for index in range(len(exData['colorNotes'])):
+        if (exData['colorNotes'][index]['b'] >= startTime) and (exData['colorNotes'][index]['b'] <= endTime):
+            # spawn two of each for fake notes
+            for i in range(2):
+                # customdata for fake notes
+                nData = {}
+                nData['animation'] = {}
+                nData['animation']['offsetWorldRotation'] = [
+                    [round(rand.uniform(-7.5,7.5),1),round(rand.uniform(-7.5,7.5),1),round(rand.uniform(-7.5,7.5),1),0.1],
+                    [0,0,0,0.375, "easeInOutBack"]
+                ]
+                nData['animation']['localRotation'] = [
+                    [round(rand.uniform(-7.5,7.5),1),round(rand.uniform(-7.5,7.5),1),round(rand.uniform(-7.5,7.5),1),0.1],
+                    [0,0,0,0.375, "easeInOutBack"]
+                ]
+                nData['animation']['dissolve'] = [
+                    [0,0],
+                    [i%2,0]
+                ]
+                nData['animation']['dissolveArrow'] = [
+                    [0,0],
+                    [(i+1)%2,0]
+                ]
+                nData['disableNoteGravity'] = True
+                nData['noteJumpStartBeatOffset'] = offset
+                nData['spawnEffect'] = False
+                nData['disableDebris'] = not not i%2 # debris stopgap
+
+                # add track if specified
+                if (i%2) == 0:
+                    nData['track'] = track[0]
+                else:
+                    nData['track'] = track[1]
+
+                # fake notes
+                fakeIndex = len(exData['customData']['fakeColorNotes'])
+                exData['customData']['fakeColorNotes'].append(dict(deepcopy(exData['colorNotes'][index])))
+                if (i%2) == 0:
+                    exData['customData']['fakeColorNotes'][fakeIndex]['b'] -= 0.002
+                exData['customData']['fakeColorNotes'][fakeIndex]['customData'] = nData
+
+            # make real notes invisible
+            exData['colorNotes'][index]['customData'] = {}
+            exData['colorNotes'][index]['customData']['disableDebris'] = True
+            exData['colorNotes'][index]['customData']['animation'] = {}
+            exData['colorNotes'][index]['customData']['animation']['dissolve'] = [[0,0]]
+            exData['colorNotes'][index]['customData']['animation']['dissolveArrow'] = [[0,0]]
+        

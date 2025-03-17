@@ -14,7 +14,7 @@ def addPrimitiveModel(type, material, position, localRotation, scale):
         localRotation (array): Rotation
         scale (array): Object Scale
     """
-    exData['customData']['customData']['environment'].append(dict(
+    exData['customData']['environment'].append(dict(
         scale=scale,
         position=position,
         localRotation=localRotation,
@@ -33,7 +33,7 @@ def addPrimitiveModelTrack(type, material, position, localRotation, scale, track
         scale (array): Object Scale
         track (string): Track
     """
-    exData['customData']['customData']['environment'].append(dict(
+    exData['customData']['environment'].append(dict(
         scale=scale,
         position=position,
         localRotation=localRotation,
@@ -122,7 +122,7 @@ def assignEnvironmentToTrack(envName, trackName, lkMethod):
         trackName (string): Track
         lkMethod (string): LookUp Method [Regex, Exact, Contains, StartsWith, EndsWith]
     """
-    exData['customData']['customData']['environment'].append(dict(id=envName, lookupMethod=lkMethod, track=trackName))
+    exData['customData']['environment'].append(dict(id=envName, lookupMethod=lkMethod, track=trackName))
 
 def disableObject(envId, lookupMe):
     """Disables object in environment
@@ -227,7 +227,7 @@ def fridgeTrack(pix, trackName, distanceFromPlayer = 12, color=[1,1,1,0]):
         for x in range(len(pix[0])):
             pixlist = pix[y][x]
             if pixlist == 'x':
-                exData['customData']['customData']['environment'].append(dict(
+                exData['customData']['environment'].append(dict(
                         geometry = {
                             'type':'Cube',
                             'material':matName

@@ -33,7 +33,7 @@ def export_diff():
     """Exports map
     """
     # remove old backup
-    if os.path.exists(exportName):
+    if os.path.exists(exportName + '.bak'):
         os.remove(exportName + '.bak')
     
     # rename old diff file incase accidental overwrites
@@ -125,3 +125,27 @@ def infoDat_removeBaseMap():
     
     #pops base map
     infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'].pop(indexes[1])
+
+def countUp():
+    """So I don't lose my sanity
+    Add this at the end of a modfile
+    """
+    # make new counter if it doesnt exist
+    if not(os.path.exists('count.txt')):
+        with open('count.txt', 'w') as f:
+            f.write('0')
+            f.close()
+    
+    # get number from counter
+    with open('count.txt', 'r') as f:
+        counter = int(f.read())
+        f.close()
+
+    # count up
+    counter += 1
+    print(f'GIVE IT UP FOR RUN {counter}!!!!')
+
+    # save result
+    with open('count.txt', 'w') as f:
+        f.write(str(counter))
+        f.close()

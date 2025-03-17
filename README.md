@@ -1,22 +1,32 @@
-# Hamen (Heck + Ramen)
+# [Header](./resources/HamenBanner.png)
 
 ## Overview
-These scripts help make Beat Saber maps that take advantage of the Heck mod. Chroma and Noodle are mostly supported with primitive Vivify support.
+A Python framework to aid in creation of Beat Saber modcharts. This has support for Heck libaries Noodle, Chroma, and Vivify.
 
 ## Usage
-this shit needs a wiki at some point
+Edit the `fileName` and `exportName` variables in `Hamen.py` depending on what file you're injecting functions into. Use the provided `example.py` file as a foundation for scripting.
 
 ## Example
 ```python
 ### example.py
 import json
-from heckNoodle import *
-from heckChroma import *
-from heckVivify import *
+from Hamen import *
+from hamenNoodle import *
+from hamenChroma import *
+from hamenVivify import *
 
-exportName = 'ExpertPlusStandard.dat' #file export name
 
-# Add arrays
+# load bundles
+bundle = loadBundleInfo('bundleinfo.json')
+
+# infodat
+infoDat_addRequirement([
+    "Noodle Extensions",
+    "Chroma",
+    "Vivify"
+])
+
+# add arrays for important stuff
 exData['customData'] = {}
 exData['customData']['fakeColorNotes'] = []
 exData['customData']['fakeBombNotes'] = []
@@ -24,14 +34,11 @@ exData['customData']['customEvents'] = []
 exData['customData']['materials'] = {}
 exData['customData']['environment'] = []
 
+
 #region ### do note scripts here
+InstantiatePrefab(8,'assets/cube.prefab','cube') # example code, remove this before doing mod effects
 
-#scale notes across X axis
-assignNotesToTrack(1,8,'notes')
-scaleTween(4,'notes',2,'easeOutQuad',[1,1,1,0],[2,1,1,1])
-
-### Save json to Ex+ file
-diPlusFile = open(exportName, 'w')
-diPlusFile.write(json.dumps(exData,indent=2))
-diPlusFile.close()
+### Save edited json and info dat
+export_infoDat()
+export_diff()
 ```
