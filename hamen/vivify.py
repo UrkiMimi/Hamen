@@ -2,7 +2,7 @@
 ## Use this with asset bundle shit
 ## Refer to https://heck.aeroluna.dev/ when using this 
 
-from Hamen import *
+from hamen.main import *
 from os import path, rename, remove
 
 ## start functions here

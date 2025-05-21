@@ -2,7 +2,7 @@
 ### Put new noodle scripts here and make sure its seperate from the main python file
 ### Refer to https://heck.aeroluna.dev/ when using this 
 ### TODO, add better documentation with autoDocstring
-from Hamen import *
+from hamen.main import *
 
 # Assigns notes to a track
 def assignNotesToTrack(startTime, endTime, trackName, colorCheck=False):
@@ -802,7 +802,7 @@ def scaleTween(nTime, trackName, duration, easing, st0, st1):
     ]
 
 
-def staticTrail(nTime, step, duration, rotation=0, shakeSteps=10):
+def staticTrail(nTime, step, duration, rotation=0, shakeSteps=100):
     noteTime = findNoteAt(nTime)
 
     # Note Setup

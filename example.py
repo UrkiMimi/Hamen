@@ -1,10 +1,9 @@
 ### Basic preperation stuff
 import json
-from Hamen import *
-from hamenNoodle import *
-from hamenChroma import *
-from hamenVivify import *
-from copy import deepcopy
+from hamen.main import *
+from hamen.noodle import *
+from hamen.chroma import *
+from hamen.vivify import *
 
 
 # load bundles
@@ -28,6 +27,9 @@ exData['customData']['environment'] = []
 
 #region ### do note scripts here
 InstantiatePrefab(8,'assets/cube.prefab','cube') # example code, remove this before doing mod effects
+
+# increment run
+countUp()
 
 ### Save edited json and info dat
 export_infoDat()

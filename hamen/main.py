@@ -32,9 +32,22 @@ infFile.close()
 def export_diff():
     """Exports map
     """
+
+    ## data cleanup 
+    # sort basic beatmap events
+    for basic in ['colorNotes', 'basicBeatmapEvents', 'bombNotes', 'obstacles', 'burstSliders']:
+        exData[basic].sort(key=beat)
+
+    # sort custom events
+    for adv in ['fakeColorNotes', 'fakeBombNotes', 'customEvents', 'fakeBurstSliders', 'fakeObstacles']:
+        if adv in exData['customData']:
+            exData['customData'][adv].sort(key=beat)
+
+
     # remove old backup
     if os.path.exists(exportName + '.bak'):
         os.remove(exportName + '.bak')
+        
     
     # rename old diff file incase accidental overwrites
     os.rename(exportName, exportName + '.bak')
@@ -149,3 +162,8 @@ def countUp():
     with open('count.txt', 'w') as f:
         f.write(str(counter))
         f.close()
+
+
+# this is for file saving so please dont remove this (even though it looks stupid)
+def beat(e):
+    return e['b']

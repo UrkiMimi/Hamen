@@ -2,7 +2,7 @@
 ## Some animation events are staying in heckNoodle cause some of this shit relies on noodle as well
 ## Specifically, most of the transformation tweens
 ## Refer to https://heck.aeroluna.dev/ when using this 
-from Hamen import *
+from hamen.main import *
 
 def addPrimitiveModel(type, material, position, localRotation, scale):
     """Creates a primitive model using Heck Geometry
