@@ -237,6 +237,16 @@ def fridgeTrack(pix, trackName, distanceFromPlayer = 12, color=[1,1,1,0]):
                     track = trackName))
 
 def clrTween(nTime, trackName, duration, clr0, clr1, easing='easeLinear'):
+    """Creates an animate track event for color tweens
+
+    Args:
+        nTime (float): Animation time (in beats)
+        trackName (string): Name of the track
+        duration (float): Animation duration time (in beats)
+        clr0 (array[5]): Initial tween
+        clr1 (array[5]): Final tween
+        easing (string, optional): Animation easing. Defaults to 'easeLinear'.
+    """
     exData['customData']['customEvents'].append(dict(b=nTime, t='AnimateTrack', d={'duration':duration, 'repeat':0}))
     exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['track'] = trackName
     clr1.append(easing)
@@ -244,3 +254,16 @@ def clrTween(nTime, trackName, duration, clr0, clr1, easing='easeLinear'):
         clr0,
         clr1
     ]   
+
+def clrPointDef(nTime, trackName, duration, clr):
+    """Creates an animate track for color tweens
+
+    Args:
+        nTime (float): Animation time (in beats)
+        trackName (string): Name of the track
+        duration (float): Animation duration (in beats)
+        clr (Nested array[5]): Animation point defintion (each event should be array[5])
+    """
+    exData['customData']['customEvents'].append(dict(b=nTime, t='AnimateTrack', d={'duration':duration, 'repeat':0}))
+    exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['track'] = trackName
+    exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['color'] = clr
