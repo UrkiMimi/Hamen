@@ -16,6 +16,10 @@ fileName = 'ExpertStandard.dat'
 # Export filename
 exportName = 'ExpertPlusStandard.dat'
 
+# version constant and stuff
+VERSION = 'v0.2.4'
+PRODID = 'Hamen <3'
+
 # open files
 exFile = open(fileName, 'r')
 exData = json.loads(exFile.read())
@@ -32,9 +36,22 @@ infFile.close()
 def export_diff():
     """Exports map
     """
+
+    ## data cleanup 
+    # sort basic beatmap events
+    for basic in ['colorNotes', 'basicBeatmapEvents', 'bombNotes', 'obstacles', 'burstSliders']:
+        exData[basic].sort(key=beat)
+
+    # sort custom events
+    for adv in ['fakeColorNotes', 'fakeBombNotes', 'customEvents', 'fakeBurstSliders', 'fakeObstacles']:
+        if adv in exData['customData']:
+            exData['customData'][adv].sort(key=beat)
+
+
     # remove old backup
     if os.path.exists(exportName + '.bak'):
         os.remove(exportName + '.bak')
+        
     
     # rename old diff file incase accidental overwrites
     os.rename(exportName, exportName + '.bak')
@@ -149,3 +166,46 @@ def countUp():
     with open('count.txt', 'w') as f:
         f.write(str(counter))
         f.close()
+
+def infoDat_settingsSetter(player = None, modifiers = None, chroma = None, cPlus = None, uiTweaks = None, nTweaks = None, graphics = None):
+    # cjd
+    dat = {}
+    
+    if player != None:
+        dat['_playerOptions'] = player
+    if modifiers != None:
+        dat['_modifiers'] = modifiers
+    if chroma != None:
+        dat['_chroma'] = chroma
+    if cPlus != None:
+        dat['_countersPlus'] = cPlus
+    if uiTweaks != None:
+        dat['_uiTweaks'] = uiTweaks
+    if nTweaks != None:
+        dat['_noteTweaks'] = nTweaks
+    if graphics != None:
+        dat['_graphics'] = graphics
+
+
+    indexes = []
+    # find export diff
+    for index in range(len(infDat['_difficultyBeatmapSets'])):
+        for index2 in range(len(infDat['_difficultyBeatmapSets'][index]['_difficultyBeatmaps'])):
+            if infDat['_difficultyBeatmapSets'][index]['_difficultyBeatmaps'][index2]['_beatmapFilename'] == exportName:
+                indexes = [index, index2]
+
+    if not('_customData' in infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'][indexes[1]]):
+        infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'][indexes[1]]['_customData'] = {}
+    
+    # generate settings
+    infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'][indexes[1]]['_customData']['_settings'] = dat
+
+# last edited by thing
+def infoDat_setEditedVersion():
+    infDat['_customData']['_editors'][PRODID] = {}
+    infDat['_customData']['_editors'][PRODID]['version'] = VERSION
+    infDat['_customData']['_editors']['_lastEditedBy'] = PRODID
+
+# this is for file saving so please dont remove this (even though it looks stupid)
+def beat(e):
+    return e['b']

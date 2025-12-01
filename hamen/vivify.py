@@ -2,7 +2,7 @@
 ## Use this with asset bundle shit
 ## Refer to https://heck.aeroluna.dev/ when using this 
 
-from Hamen import *
+from hamen.main import *
 from os import path, rename, remove
 
 ## start functions here
@@ -91,7 +91,7 @@ def unityBlit(nTime, duration, propID, type, value, asset=None, priority=None, c
     # inject customData into event
     exData['customData']['customEvents'].append(dict(b=nTime, t='Blit', d=cData))
 
-def createCamera(nTime, id, cullingTrack='', whitelist=True, depthMode = ['depth'], texture=None, depthTexture=None):
+def createCamera(nTime, id, texture=None, depthTexture=None, prop=None):
     """Creates a camera
 
     Args:
@@ -99,15 +99,17 @@ def createCamera(nTime, id, cullingTrack='', whitelist=True, depthMode = ['depth
         id (string): ID of camera
         texture (string): Will render to a new texture set to this key (Optional)
         depthTexture (string): Renders just the depth to this texture (Optional)
-        cullingTrack (string, optional): Track to be culled. Defaults to ''.
-        whitelist (bool, optional): Enable or disable Whitelist mode. Defaults to True.
-        depthMode (list, optional): Depth texture shit i dont understand. Defaults to ['depth'].
+        prop (json dict): Camera Properties. Read Vivify documentation (Optional)
     """
+    # culling data
+    
 
     # customData part
     cData = {}
     cData['id'] = id
-    cData['properties'] = [dict(culling={'track':cullingTrack,'whitelist':whitelist}, depthTextureMode = depthMode)]
+    if prop != None:
+        cData['properties'] = prop
+
 
     # optional shit
     if texture != None:
@@ -171,6 +173,14 @@ def destroyObject(nTime, id):
     cData['id'] = id
     
     exData['customData']['customEvents'].append(dict(b=nTime, t='DestroyObject', d=cData))
+
+def createScreenTexture(time, id):
+    """Creates a screen texture
+
+    Args:
+        id (string): Texture ID
+    """
+    exData['customData']['customEvents'].append(dict(b=time, t='CreateScreenTexture', d={'id':id}))
 
 def infoDat_injectCRCs(jsn):
     """Injects CRCs into info.dat

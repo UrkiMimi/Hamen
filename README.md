@@ -6,7 +6,8 @@ A Python framework to aid in creation of Beat Saber modcharts. This has support 
 ## Usage
 Edit the `fileName` and `exportName` variables in `Hamen.py` depending on what file you're injecting functions into. Use the provided `example.py` file as a foundation for scripting.
 
-## Example
+## Example 
+## TODO: Replace this segment with the reorganized library setup pls kthnx ;^)
 ```python
 ### example.py
 import json
