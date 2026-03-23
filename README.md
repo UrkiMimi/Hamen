@@ -9,12 +9,13 @@ Edit the `fileName` and `exportName` variables in `Hamen.py` depending on what f
 ## Example 
 ## TODO: Replace this segment with the reorganized library setup pls kthnx ;^)
 ```python
-### example.py
+# example.py
+### Basic preperation stuff
 import json
-from Hamen import *
-from hamenNoodle import *
-from hamenChroma import *
-from hamenVivify import *
+from hamen.main import *
+from hamen.noodle import *
+from hamen.chroma import *
+from hamen.vivify import *
 
 
 # load bundles
@@ -37,7 +38,10 @@ exData['customData']['environment'] = []
 
 
 #region ### do note scripts here
-InstantiatePrefab(8,'assets/cube.prefab','cube') # example code, remove this before doing mod effects
+InstantiatePrefab(8,'assets/cube.prefab','cube')
+
+# increment run
+countUp()
 
 ### Save edited json and info dat
 export_infoDat()
