@@ -17,7 +17,7 @@ fileName = 'ExpertStandard.dat'
 exportName = 'ExpertPlusStandard.dat'
 
 # version constant and stuff
-VERSION = 'v0.2.4'
+VERSION = 'v0.2.5'
 PRODID = 'Hamen <3'
 
 # open files
