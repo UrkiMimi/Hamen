@@ -4,6 +4,10 @@
 ## Refer to https://heck.aeroluna.dev/ when using this 
 from hamen.main import *
 
+# the fucking 
+exData['customData']['materials'] = {}
+exData['customData']['environment'] = []
+
 def addPrimitiveModel(type, material, position, localRotation, scale):
     """Creates a primitive model using Heck Geometry
 

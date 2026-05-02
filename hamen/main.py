@@ -29,6 +29,10 @@ infFile = open('Info.dat', 'r')
 infDat = json.loads(infFile.read())
 infFile.close()
 
+# required arrays
+exData['customData'] = {}
+exData['customData']['customEvents'] = []
+
 
 
 #region functions

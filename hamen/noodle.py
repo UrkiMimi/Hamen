@@ -4,6 +4,10 @@
 ### TODO, add better documentation with autoDocstring
 from hamen.main import *
 
+# lmfao
+exData['customData']['fakeColorNotes'] = []
+exData['customData']['fakeBombNotes'] = []
+
 # Assigns notes to a track
 def assignNotesToTrack(startTime, endTime, trackName, colorCheck=False):
     # omitting messages
@@ -753,7 +757,7 @@ def notOutThere(startTime, endTime, offset, speed):
             [0.01,0.01,1,0.5]
         ]
 
-def spawnFakeNotesWithTrackAt(startTime, endTime, disableGravity, timeOffset, track='', disableDebris=False):
+def spawnFakeNotesWithTrackAt(startTime, endTime, disableGravity, timeOffset, track='', disableDebris=False, uninteractable=False):
     for index in range(len(exData['colorNotes'])):
         if (startTime <= exData['colorNotes'][index]['b']) and (endTime >= exData['colorNotes'][index]['b']):
             fakeLen = len(exData['customData']['fakeColorNotes'])
@@ -767,6 +771,8 @@ def spawnFakeNotesWithTrackAt(startTime, endTime, disableGravity, timeOffset, tr
             exData['customData']['fakeColorNotes'][fakeLen]['customData']['disableDebris'] = disableDebris
             if disableGravity:
                 exData['customData']['fakeColorNotes'][fakeLen]['customData']['disableNoteGravity'] = True
+            if uninteractable:
+                exData['customData']['fakeColorNotes'][fakeLen]['customData']['uninteractable'] = True
 
 def removeGravity(startTime, endTime, fakeNotes=False):
     if fakeNotes:
@@ -1055,7 +1061,7 @@ def assignPlayerToTrack(nTime, trackName, target=None):
 def childrenTracks(nTime, trackName, childrens):
     exData['customData']['customEvents'].append(dict(b=nTime, t='AssignTrackParent', d={'childrenTracks':childrens, 'parentTrack':trackName}))
     
-def assignPathAnimation(nTime, trackName, duration, easings='easeLinear', pos=None, worldRotation=None, localRotation=None, scale=None, dissolve=None, dissolveArrow=None):
+def assignPathAnimation(nTime, trackName, duration, easings='easeLinear', pos=None, worldRotation=None, localRotation=None, scale=None, dissolve=None, dissolveArrow=None, definitePos=None, interactable=None):
     dat = {}
     # add essential stuff
     dat['track'] = trackName
@@ -1075,6 +1081,10 @@ def assignPathAnimation(nTime, trackName, duration, easings='easeLinear', pos=No
         dat['dissolve'] = dissolve
     if (dissolveArrow != None):
         dat['dissolveArrow'] = dissolveArrow
+    if (definitePos != None):
+        dat['definitePosition'] = definitePos
+    if (interactable != None):
+        dat['interactable'] = interactable
 
     
     exData['customData']['customEvents'].append(dict(b=nTime, t='AssignPathAnimation', d=dat))
@@ -1583,3 +1593,29 @@ def timeGhost(nTime, duration, track = ''):
     dissolveBoth(nTime, track, duration, 1, 0)
 
 
+def animateTrack(nTime, trackName, duration, easings='easeLinear', pos=None, worldRotation=None, localRotation=None, scale=None, dissolve=None, dissolveArrow=None, interactable=None, time=None):
+    dat = {}
+    # add essential stuff
+    dat['track'] = trackName
+    dat['duration'] = duration
+    dat['easing'] = easings
+    
+    #if statement hell
+    if (pos != None):
+        dat['offsetPosition'] = pos
+    if (worldRotation != None):
+        dat['offsetWorldRotation'] = worldRotation
+    if (localRotation != None):
+        dat['localRotation'] = localRotation
+    if (scale != None):
+        dat['scale'] = scale
+    if (dissolve != None):
+        dat['dissolve'] = dissolve
+    if (dissolveArrow != None):
+        dat['dissolveArrow'] = dissolveArrow
+    if (interactable != None):
+        dat['interactable'] = interactable
+    if (time != None):
+        dat['time'] = time
+
+    exData['customData']['customEvents'].append(dict(b=nTime, t='AnimateTrack', d=dat))
