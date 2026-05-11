@@ -1,13 +1,14 @@
 ### Basic preperation stuff
-import json
 from hamen.main import *
-from hamen.noodle import *
-from hamen.chroma import *
+setup('ExpertStandard.dat', 'ExpertPlusStandard.dat')
+
+# import optionals
 from hamen.vivify import *
 
 
 # load bundles
 bundle = loadBundleInfo('bundleinfo.json')
+infoDat_injectCRCs()
 
 # infodat
 infoDat_addRequirement([
@@ -16,17 +17,9 @@ infoDat_addRequirement([
     "Vivify"
 ])
 
-# add arrays for important stuff
-exData['customData'] = {}
-exData['customData']['fakeColorNotes'] = []
-exData['customData']['fakeBombNotes'] = []
-exData['customData']['customEvents'] = []
-exData['customData']['materials'] = {}
-exData['customData']['environment'] = []
-
 
 #region ### do note scripts here
-InstantiatePrefab(8,'assets/cube.prefab','cube') # example code, remove this before doing mod effects
+InstantiatePrefab(8, bundle['prefabs']['cube'],'cube') # example code, remove this before doing mod effects
 
 # increment run
 countUp()

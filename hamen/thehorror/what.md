@@ -1,0 +1,2 @@
+# What are these files?
+I'm in the process of documenting most of the functions in Hamen and since I'm lazy, I had Claude write temporary documentation for this. **This hasn't been reviewed by me and may contains issues. Be warned.** Part of these may get merged into the actual documentation but I'm not sure of an ETA for that right now.
