@@ -5,8 +5,11 @@
 from hamen.main import *
 
 # lmfao
-exData['customData']['fakeColorNotes'] = []
-exData['customData']['fakeBombNotes'] = []
+if 'customData' in exData:
+    exData['customData']['fakeColorNotes'] = []
+    exData['customData']['fakeBombNotes'] = []
+else:
+    raise TypeError('Unable to find customData in map JSON.')
 
 # Assigns notes to a track
 def assignNotesToTrack(startTime, endTime, trackName, colorCheck=False):

@@ -20,19 +20,41 @@ exportName = 'ExpertPlusStandard.dat'
 VERSION = 'v0.2.4'
 PRODID = 'Hamen <3'
 
+# stuff
+infDat = {}
+exData = {}
+
+
 # open files
-exFile = open(fileName, 'r')
-exData = json.loads(exFile.read())
-exFile.close()
+def setup(original, export):
+    """Initialization script
 
-infFile = open('Info.dat', 'r')
-infDat = json.loads(infFile.read())
-infFile.close()
+    Args:
+        original (string): The beatmap you're reading from
+        export (string): The beatmap you're exporting to
+    """
 
-# required arrays
-exData['customData'] = {}
-exData['customData']['customEvents'] = []
+    global exData
+    global infDat
+    global fileName
+    global exportName
 
+    # set these names first for future reference
+    fileName = original
+    exportName = export
+
+    # thingy
+    exFile = open(fileName, 'r')
+    exData = json.loads(exFile.read())
+    exFile.close()
+
+    infFile = open('Info.dat', 'r')
+    infDat = json.loads(infFile.read())
+    infFile.close()
+
+    # required arrays
+    exData['customData'] = {}
+    exData['customData']['customEvents'] = []
 
 
 #region functions

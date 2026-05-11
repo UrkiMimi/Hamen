@@ -5,8 +5,12 @@
 from hamen.main import *
 
 # the fucking 
-exData['customData']['materials'] = {}
-exData['customData']['environment'] = []
+if 'customData' in exData:
+    exData['customData']['materials'] = {}
+    exData['customData']['environment'] = []
+else:
+    raise TypeError('Unable to find customData in map JSON.')
+
 
 def addPrimitiveModel(type, material, position, localRotation, scale):
     """Creates a primitive model using Heck Geometry
