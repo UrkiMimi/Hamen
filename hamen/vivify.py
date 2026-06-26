@@ -50,7 +50,7 @@ def setUnityGlobalProperty(nTime, duration, propID, type, value, easing='easeLin
     # inject customData into event
     exData['customData']['customEvents'].append(dict(b=nTime, t='SetGlobalProperty', d=cData))
 
-def unityBlit(nTime, duration, propID, type, value, asset=None, priority=None, cPass=None, order=None, source=None, destination=None, easing='easeLinear'):
+def unityBlit(nTime, duration, propID=None, type=None, value=None, asset=None, priority=None, cPass=None, order=None, source=None, destination=None, easing='easeLinear'):
     """Assigns material to camera
 
     Args:
@@ -72,7 +72,20 @@ def unityBlit(nTime, duration, propID, type, value, asset=None, priority=None, c
     cData = {}
     cData['duration'] = duration
     cData['easing'] = easing
-    cData['properties'] = [dict(id = propID, type=type, value=value)]
+
+    # camera properties
+    cam = {}
+
+    if propID != None:
+        cam['id'] = propID
+    if type != None:
+        cam['type'] = type
+    if value != None:
+        cam['value'] = value
+
+    # only add this argument if the json isnt empty
+    if len(cam) != 0:
+        cData['properties'] = cam
     
     # optional stuff
     if asset != None:
@@ -161,6 +174,36 @@ def InstantiatePrefab(nTime, asset, id=None, track=None, position=[0,0,0], local
     # inject customData into json
     exData['customData']['customEvents'].append(dict(b=nTime, t='InstantiatePrefab', d=cData))
 
+def setRenderingSettings(nTime, duration=0, easing='easeLinear', renderSettings=None, qualitySettings=None, xrSettings=None):
+    """Allows you to change most of Unity's rendering or quality settings
+    This can be extremely dangerous. Only use this when you need to.
+
+    Args:
+        nTime (float): Time in beats
+        duration (float, optional): Length of the event in beats. Defaults to 0.
+        easing (str, optional): Easing for the event. Defaults to 'easeLinear'.
+        renderSettings (json, optional): Rendering settings.
+        qualitySettings (json, optional): Quality Settings. 
+        xrSettings (json, optional): XR specific settings.
+    """
+    # init
+    cData = {}
+
+    # literally everything
+    if duration != 0:
+        cData['duration'] = duration
+    if easing != 'easeLinear':
+        cData['easing'] = easing
+    if renderSettings != None:
+        cData['renderSettings'] = renderSettings
+    if qualitySettings != None:
+        cData['qualitySettings'] = qualitySettings
+    if xrSettings!= None:
+        cData['xrSettings'] = xrSettings
+
+    # inject
+    exData['customData']['customEvents'].append(dict(b=nTime, t='SetRenderingSettings', d=cData))
+
 def destroyObject(nTime, id):
     """Destroys an object in the scene. Can be a prefab, camera, or texture id.
 
@@ -174,13 +217,27 @@ def destroyObject(nTime, id):
     
     exData['customData']['customEvents'].append(dict(b=nTime, t='DestroyObject', d=cData))
 
-def createScreenTexture(time, id):
+def createScreenTexture(time, id, width=None, height=None, xRatio=None, yRatio=None):
     """Creates a screen texture
 
     Args:
         id (string): Texture ID
     """
-    exData['customData']['customEvents'].append(dict(b=time, t='CreateScreenTexture', d={'id':id}))
+    
+    cData = {}
+    cData['id'] = id
+
+    # optional
+    if width != None:
+        cData['width'] = width
+    if height != None:
+        cData['height'] = height
+    if xRatio != None:
+        cData['xRatio'] = xRatio
+    if yRatio != None:
+        cData['yRatio'] = yRatio
+
+    exData['customData']['customEvents'].append(dict(b=time, t='CreateScreenTexture', d=cData))
 
 def infoDat_injectCRCs(jsn):
     """Injects CRCs into info.dat

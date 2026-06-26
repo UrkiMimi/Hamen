@@ -622,6 +622,10 @@ def posPointDef(nTime, trackName, duration, arrayPointDef,easing='easeLinear'):
     exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['track'] = trackName
     exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['offsetPosition'] = arrayPointDef
 
+def posPointDefEnv(nTime, trackName, duration, arrayPointDef,easing='easeLinear'):
+    exData['customData']['customEvents'].append(dict(b=nTime, t='AnimateTrack', d={'duration':duration, 'repeat':0, 'easing':easing}))
+    exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['track'] = trackName
+    exData['customData']['customEvents'][len(exData['customData']['customEvents']) - 1]['d']['position'] = arrayPointDef
 
 def forceOffset(startTime, endTime, offset):
     for index in range(len(exData['colorNotes'])):
@@ -761,21 +765,34 @@ def notOutThere(startTime, endTime, offset, speed):
         ]
 
 def spawnFakeNotesWithTrackAt(startTime, endTime, disableGravity, timeOffset, track='', disableDebris=False, uninteractable=False):
+    # loop through notes
     for index in range(len(exData['colorNotes'])):
+
+        # create fake notes at time
         if (startTime <= exData['colorNotes'][index]['b']) and (endTime >= exData['colorNotes'][index]['b']):
-            fakeLen = len(exData['customData']['fakeColorNotes'])
+            # make a complete copy of the note
+            fakeLen = len(exData['customData']['fakeColorNotes']) # for indexing so python doesnt die
             exData['customData']['fakeColorNotes'].append(dict(deepcopy(exData['colorNotes'][index])))
+
+            # offset
             exData['customData']['fakeColorNotes'][fakeLen]['b'] = exData['customData']['fakeColorNotes'][fakeLen]['b'] + timeOffset
+
+            # customdata
             if not('customData' in exData['customData']['fakeColorNotes'][fakeLen]):
                 exData['customData']['fakeColorNotes'][fakeLen]['customData'] = {}
             if not(track == ''):
                 exData['customData']['fakeColorNotes'][fakeLen]['customData']['track'] = track
+
+            # gravity and debris
             exData['customData']['fakeColorNotes'][fakeLen]['customData']['spawnEffect'] = False
+
+            # yep
             exData['customData']['fakeColorNotes'][fakeLen]['customData']['disableDebris'] = disableDebris
             if disableGravity:
                 exData['customData']['fakeColorNotes'][fakeLen]['customData']['disableNoteGravity'] = True
             if uninteractable:
                 exData['customData']['fakeColorNotes'][fakeLen]['customData']['uninteractable'] = True
+
 
 def removeGravity(startTime, endTime, fakeNotes=False):
     if fakeNotes:
@@ -1019,7 +1036,7 @@ def bigBois(startTime, endTime, amount, trackName):
         ]
 
 # creates dust from dissolved notes
-def space(startTime, endTime, amount, trackName, offset, njs=20):
+def space(startTime, endTime, amount, trackName, offset, njs=20, timeOffset=0):
     ti = (endTime - startTime) * amount
     for i in range(ti):
         # yippie
@@ -1027,6 +1044,7 @@ def space(startTime, endTime, amount, trackName, offset, njs=20):
         fakeIndex = len(exData['customData']['fakeColorNotes'])
         exData['customData']['fakeColorNotes'].append(dict(b=startTime+i/amount,x=0,y=0,c=rand.randint(0,1),a=0,d=rand.randint(0,7),customData={}))
         exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation'] = {}
+        exData['customData']['fakeColorNotes'][fakeIndex]['b'] += timeOffset
         exData['customData']['fakeColorNotes'][fakeIndex]['customData']['disableNoteGravity'] = True
         exData['customData']['fakeColorNotes'][fakeIndex]['customData']['noteJumpMovementSpeed'] = njs
         exData['customData']['fakeColorNotes'][fakeIndex]['customData']['noteJumpStartBeatOffset'] = offset
@@ -1340,7 +1358,7 @@ def randomPosNJS(startTime, endTime):
                 [0.85,0.2]
             ]
 
-def spawnFakeNotesWithSpiral(startTime, endTime, timeSig, spiralOffset = [0,0,0], height=7.5):
+def spawnFakeNotesWithSpiral(startTime, endTime, timeSig, spiralOffset = [0,0,0], height=7.5, offset=0, noteJumpSpeed=10, track=''):
     """Spawns notes with a spiral type of effect based on time signature
 
     Args:
@@ -1363,6 +1381,11 @@ def spawnFakeNotesWithSpiral(startTime, endTime, timeSig, spiralOffset = [0,0,0]
         nData['disableNoteGravity'] = True
         nData['spawnEffect'] = False
         nData['disableNoteDebris'] = True
+        nData['noteJumpStartBeatOffset'] = offset
+        nData['noteJumpMovementSpeed'] = noteJumpSpeed
+
+        if track != '':
+            nData['track'] = track
 
         # animation
         nData['animation'] = {}
@@ -1380,6 +1403,7 @@ def spawnFakeNotesWithSpiral(startTime, endTime, timeSig, spiralOffset = [0,0,0]
         # add customData to note
         exData['customData']['fakeColorNotes'][fIndex]['customData'] = nData
     
+
 def rotationRandC1Knockoff(startTime, endTime, offset = 6, track=None, realNoteTrack = 'realNotes'):
     """Makes world and local rotation go to random positions at beginning of lifetime
 
@@ -1462,7 +1486,7 @@ def invisibleNotes(startTime, endTime):
             exData['colorNotes'][index]['customData']['animation']['dissolve'] = [[0,0]]
             exData['colorNotes'][index]['customData']['animation']['dissolveArrow'] = [[0,0]]
 
-def wipeCustomNoteData(startTime, endTime):
+def wipeCustomNoteData(startTime, endTime, fakeNotes = False):
     """Wipes customData from a note. Somewhat dangerous
 
     Args:
@@ -1471,7 +1495,14 @@ def wipeCustomNoteData(startTime, endTime):
     """
     for index in range(len(exData['colorNotes'])):
         if (exData['colorNotes'][index]['b'] >= startTime) and (exData['colorNotes'][index]['b'] <= endTime):
-            exData['colorNotes'][index].pop('customData')
+            if ('customData' in exData['colorNotes'][index]):
+                exData['colorNotes'][index].pop('customData')
+
+    # fake notes
+    for index in range(len(exData['customData']['fakeColorNotes'])):
+        if (exData['customData']['fakeColorNotes'][index]['b'] >= startTime) and (exData['customData']['fakeColorNotes'][index]['b'] <= endTime):
+            if ('customData' in exData['customData']['fakeColorNotes'][index]):
+                exData['customData']['fakeColorNotes'][index].pop('customData')
 
 def spiralNoteTrail(nTime, total = 64, step = 0.01, spiralFlex = 1, noteOffset = 0, scaleStep=.5, posStep = 10):
     # get notes
@@ -1622,3 +1653,104 @@ def animateTrack(nTime, trackName, duration, easings='easeLinear', pos=None, wor
         dat['time'] = time
 
     exData['customData']['customEvents'].append(dict(b=nTime, t='AnimateTrack', d=dat))
+
+
+# a more complex version of the space function
+def complexSpace(startTime, endTime, amount, trackNames, offset, njs=20, timeOffset=0):
+    ti = (endTime - startTime) * amount
+    for i in range(ti):
+        # pregenerate everything needed
+        coords = [rand.randint(0,360),rand.randint(0,360),rand.randint(0,360)]
+
+        # yippie
+    
+        fakeIndex = len(exData['customData']['fakeColorNotes'])
+        exData['customData']['fakeColorNotes'].append(dict(b=startTime+i/amount,x=0,y=0,c=rand.randint(0,1),a=0,d=rand.randint(0,7),customData={}))
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation'] = {}
+        exData['customData']['fakeColorNotes'][fakeIndex]['b'] += timeOffset
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['disableNoteGravity'] = True
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['noteJumpMovementSpeed'] = njs
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['noteJumpStartBeatOffset'] = offset
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['spawnEffect'] = False
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['uninteractable'] = True
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['track'] = rand.choice(trackNames)
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['offsetWorldRotation'] = [
+            [coords[0], coords[1], coords[2], 0],
+            [coords[0] + rand.randint(-45,45), coords[1] + rand.randint(-45,45) ,coords[2] + rand.randint(-45,45), 1]
+        ]
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['offsetPosition'] = [
+            [rand.randint(-4,4),rand.randint(-50,50),5,0],
+            [rand.randint(-4,4),rand.randint(-50,50),5,0,'easeOutSine']
+        ]
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['localRotation'] = [
+            [rand.randint(0,360),rand.randint(0,360),rand.randint(0,360),0],
+            [rand.randint(0,360),rand.randint(0,360),rand.randint(0,360),1,'easeOutSine']
+        ]
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['dissolve'] = [
+            [0.25,0],
+            [0,0.25]
+        ]
+        exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['dissolveArrow'] = [
+            [0.25,0],
+            [0.75,0.25]
+        ]
+
+# burn in note trail
+def BurnInNoteTrail(nTime, total = 64, step = 0.01, spiralFlex = 1, noteOffset = 0, posStep = 10, track=''):
+    # get notes
+    notes = findNoteAt(nTime)
+
+    # loop
+    for i in range(total):
+        for index in notes:
+            fakeIndex = len(exData['customData']['fakeColorNotes'])
+            exData['customData']['fakeColorNotes'].append(deepcopy(exData['colorNotes'][index]))
+            exData['customData']['fakeColorNotes'][fakeIndex]['b'] += step * (i+1)
+
+            #custom note data
+            cData = {}
+            cData['uninteractable'] = True
+            cData['disableDebris'] = True
+            cData['spawnEffect'] = False
+            cData['noteJumpStartBeatOffset'] = noteOffset
+            
+            # track
+            if track != '':
+                cData['track'] = track
+
+            # animation
+            cData['animation'] = {}
+            cData['animation']['offsetPosition'] = [
+                [0,0,0,0.4],
+                [0,0,(i)*posStep+10,0.5,'easeInExpo'],
+                [0,0,(i)*posStep+10,0.6],
+                [rand.randint(-10,10), rand.randint(-10,10)+4, rand.randint(-20,20) + (i)*posStep-10, 0.8, 'easeInQuint']
+            ]
+            """
+            cData['animation']['dissolve'] = [
+                [0,0]
+            ]
+            cData['animation']['dissolveArrow'] = [
+                [0, 0.49], 
+                [0.99, 0.51,'easeInExpo'],
+                [1, 0.6],
+                [0, 0.8]
+            ]"""
+            cData['animation']['dissolve'] = [
+                [0, 0.49], 
+                [0.99, 0.51,'easeInExpo'],
+                [1, 0.7],
+                [0, 0.8]
+            ]
+
+            cData['animation']['offsetWorldRotation'] = [
+                [0,0,0,0.4],
+                [0,0,i*spiralFlex,0.5]
+            ]
+
+            cData['animation']['localRotation'] = [
+                [0,0,0,0.6],
+                [rand.randint(-135,135), rand.randint(-135,135), rand.randint(-135,135), 0.8,'easeInQuint']
+            ]
+
+            exData['customData']['fakeColorNotes'][fakeIndex]['customData'] = cData

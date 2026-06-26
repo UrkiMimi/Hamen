@@ -53,6 +53,7 @@ def setup(original, export):
     infFile.close()
 
     # required arrays
+    # to preserve bookmarks=
     exData['customData'] = {}
     exData['customData']['customEvents'] = []
 
@@ -83,7 +84,7 @@ def export_diff():
     os.rename(exportName, exportName + '.bak')
 
     diPlusFile = open(exportName, 'w')
-    diPlusFile.write(json.dumps(exData,indent=2))
+    diPlusFile.write(json.dumps(exData, indent=2))
     diPlusFile.close()
 
 #region info.dat part
