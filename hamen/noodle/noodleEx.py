@@ -43,6 +43,19 @@ def noteAngleToRadians(angle):
     direc *= math.pi/180
     return direc
 
+def ex_lerp(start, end, lerp):
+    """Linear interpolation function.
+
+    Args:
+        start (float): Starting value
+        end (float): End value
+        lerp (float): Lerp value
+
+    Returns:
+        float: returns an interpolated value
+    """
+    return (start * (1 - lerp)) + (end * lerp)
+
 # Assigns notes to a track
 def assignNotesToTrack(startTime, endTime, trackName, colorCheck=False):
     # omitting messages
@@ -115,13 +128,11 @@ def forceOffset(startTime, endTime, offset):
             if not('customData' in exData['colorNotes'][index]):
                 exData['colorNotes'][index]['customData'] = {}
             exData['colorNotes'][index]['customData']['noteJumpStartBeatOffset'] = offset
-            exData['colorNotes'][index]['customData']['disableNoteGravity'] = True
     for index in range(len(exData['customData']['fakeColorNotes'])):
         if (startTime <= exData['customData']['fakeColorNotes'][index]['b']) and (endTime >= exData['customData']['fakeColorNotes'][index]['b']):
             if not('customData' in exData['customData']['fakeColorNotes'][index]):
                 exData['customData']['fakeColorNotes'][index]['customData'] = {}
             exData['customData']['fakeColorNotes'][index]['customData']['noteJumpStartBeatOffset'] = offset
-            exData['customData']['fakeColorNotes'][index]['customData']['disableNoteGravity'] = True 
 
 # forces njs on specified range of notes
 def forceNJS(startTime, endTime, jumpspeed, realNotes = False):
@@ -258,7 +269,7 @@ def wipeCustomNoteData(startTime, endTime, fakeNotes = False):
                 exData['customData']['fakeColorNotes'][index].pop('customData')
 
 
-def animateTrack(nTime, trackName, duration, easings='easeLinear', pos=None, worldRotation=None, localRotation=None, scale=None, dissolve=None, dissolveArrow=None, interactable=None, time=None):
+def animateTrack(nTime, trackName, duration, easings='easeLinear',offsetPos=None, worldRotation=None, localRotation=None, scale=None, dissolve=None, dissolveArrow=None, interactable=None, time=None,  pos=None, rotation=None):
     dat = {}
     # add essential stuff
     dat['track'] = trackName
@@ -267,11 +278,15 @@ def animateTrack(nTime, trackName, duration, easings='easeLinear', pos=None, wor
     
     #if statement hell
     if (pos != None):
-        dat['offsetPosition'] = pos
+        dat['position'] = pos
+    if (offsetPos != None):
+        dat['offsetPosition'] = offsetPos
     if (worldRotation != None):
         dat['offsetWorldRotation'] = worldRotation
     if (localRotation != None):
         dat['localRotation'] = localRotation
+    if (rotation != None):
+        dat['rotation'] = rotation
     if (scale != None):
         dat['scale'] = scale
     if (dissolve != None):
@@ -320,4 +335,5 @@ def appendCustomData(startTime, endTime, customData):
                 exData['colorNotes'][index]['customData'] = cData
             else:
                 exData['colorNotes'][index]['customData'] = customData
+
 

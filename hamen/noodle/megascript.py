@@ -1670,3 +1670,102 @@ def BurnInNoteTrail(nTime, total = 64, step = 0.01, spiralFlex = 1, noteOffset =
             exData['customData']['fakeColorNotes'][fakeIndex]['customData'] = cData
 
 
+# for 360 compat
+def convertRotationEventsToNoodle(startTime, endTime):
+    # notes
+    for index in range(len(exData['colorNotes'])):
+        if (exData['colorNotes'][index]['b'] >= startTime) and (exData['colorNotes'][index]['b'] <= endTime):
+            beat = exData['colorNotes'][index]['b']
+            rotation = 0
+
+            # sniff through rotation array (new fish mcbites amber alert meal!)
+            for event in exData['rotationEvents']:
+                if (beat == event['b']) or (beat < event['b']):
+                    break
+                else:
+                    rotation += event['r']
+
+            
+            # add rotation to note
+            # if statement here cause having [0,0,0] for world rotation is super redundant
+            if (rotation != 0):
+                if ('customData' in exData['colorNotes'][index]):
+                    cData = deepcopy(exData['colorNotes'][index]['customData'])
+                else:
+                    cData = {}
+                
+                cData['worldRotation'] = [0,rotation,0]
+                exData['colorNotes'][index]['customData'] = cData
+    
+    # bombs
+    for index in range(len(exData['bombNotes'])):
+        if (exData['bombNotes'][index]['b'] >= startTime) and (exData['bombNotes'][index]['b'] <= endTime):
+            beat = exData['bombNotes'][index]['b']
+            rotation = 0
+
+            # sniff through rotation array (new fish mcbites amber alert meal!)
+            for event in exData['rotationEvents']:
+                rotation += event['r']
+
+                if (beat == event['b']):
+                    break
+            
+            # add rotation to note
+            # if statement here cause having [0,0,0] for world rotation is super redundant
+            if (rotation != 0):
+                if ('customData' in exData['bombNotes'][index]):
+                    cData = deepcopy(exData['bombNotes'][index]['customData'])
+                else:
+                    cData = {}
+                
+                cData['worldRotation'] = [0,rotation,0]
+                exData['bombNotes'][index]['customData'] = cData
+
+    # remove the array as it will cause issues on final build
+    exData.pop('rotationEvents')
+
+
+# i'm sorry i have no idea what to call this one
+def the_chewer(startTime, endTime):
+    # notes
+    for index in range(len(exData['colorNotes'])):
+        if (exData['colorNotes'][index]['b'] >= startTime) and (exData['colorNotes'][index]['b'] <= endTime):
+            # customdata
+            cData = {}
+            cData['noteJumpStartBeatOffset'] = 2
+            cData['noteJumpMovementSpeed'] = 5
+            cData['spawnEffect'] = False
+            cData['animation'] = {}
+
+            # animation
+            # rotation
+            r = [rand.randint(-2,2),rand.randint(-20,20),0,0]
+
+            cData['animation']['localRotation'] = [
+                [-r[0],-r[1],-r[2],0],
+                [0,0,0,0.5,'easeOutBack']
+            ]
+
+            cData['animation']['offsetWorldRotation'] = [
+                [r[0],r[1],r[2],0],
+                [0,0,0,0.5,'easeOutBack']
+            ]
+
+            cData['animation']['dissolve'] = [
+                [0,0],
+                [1,0.25]
+            ]
+
+
+
+            # inject
+            exData['colorNotes'][index]['customData'] |= cData
+
+def lazyNoteJump(startTime, endTime):
+    for index in range(len(exData['colorNotes'])):
+        if (exData['colorNotes'][index]['b'] >= startTime) and (exData['colorNotes'][index]['b'] <= endTime):
+            if not('customData' in exData['colorNotes'][index]):
+                exData['colorNotes'][index]['customData'] = {}
+
+            exData['colorNotes'][index]['customData']['flip'] = [rand.randint(-2,2), rand.randint(0,2)]
+            

@@ -204,6 +204,24 @@ def setRenderingSettings(nTime, duration=0, easing='easeLinear', renderSettings=
     # inject
     exData['customData']['customEvents'].append(dict(b=nTime, t='SetRenderingSettings', d=cData))
 
+def setAnimatorProperty(nTime, duration, id, animatorID, animatorType, animatorValue, easing='easeLinear'):
+    # custom data
+    cData = {}
+    cData['id'] = id
+    cData['duration'] = duration
+    cData['easing'] = easing
+    cData['properties'] = []
+
+    # aaaaa
+    aData = {}
+    aData['id'] = animatorID
+    aData['type'] = animatorType
+    aData['value'] = animatorValue
+    cData['properties'].append(aData)
+    # inject customData into json
+    exData['customData']['customEvents'].append(dict(b=nTime, t='SetAnimatorProperty', d=cData))
+
+
 def destroyObject(nTime, id):
     """Destroys an object in the scene. Can be a prefab, camera, or texture id.
 
