@@ -69,7 +69,7 @@ def assignNotesToTrack(startTime, endTime, trackName, colorCheck=False):
             # overwriting messages
             elif ('track' in exData['colorNotes'][index]['customData']) and noOmit:
                 mainTrack = exData['colorNotes'][index]['customData']['track']
-                print(f'Existing track {mainTrack} in note {index}. Overwriting.')
+                print(f'{debug_ASNIColor.RED}Existing track {mainTrack} in note {index}. Overwriting.{debug_ASNIColor.RESET}')
 
                 #omit future messages
                 noOmit = False

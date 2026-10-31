@@ -4,89 +4,6 @@
 from hamen.main import *
 from hamen.noodle.noodleEx import *
 
-# Spawns a bulk of notes based on nTime
-def kablooey(amount, nTime, spread):
-    nBuffer = findNoteAt(nTime)
-    for index2 in nBuffer:
-        fakeNoteLength = len(exData['customData']['fakeColorNotes'])
-        for index in range(amount):
-            # to keep my sanity
-            fakeIndex = index + fakeNoteLength
-
-            # General customData setup
-            exData['customData']['fakeColorNotes'].append(dict(exData['colorNotes'][nBuffer[0]]))
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData'] = {}
-            exData['customData']['fakeColorNotes'][fakeIndex]['b'] = exData['customData']['fakeColorNotes'][fakeIndex]['b'] + 0.001
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['disableNoteGravity'] = True
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['uninteractable'] = True
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['noteJumpMovementSpeed'] = 0.01
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['noteJumpStartBeatOffset'] = 3
-
-            # Animation Fuckery
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation'] = {}
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['localRotation'] = [
-                [0,0,0,0.5],
-                [rand.randint(0,360),rand.randint(0,360),rand.randint(0,360),0.65,'easeOutExpo']
-            ]
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['offsetPosition'] = [
-                [0,0,0,0.5],
-                [round(rand.uniform(-spread,spread),3),round(rand.uniform(-spread,spread),3),round(rand.uniform(0,spread),3),0.65,'easeOutExpo']
-                ]
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['dissolve'] = [
-                [0,0.5],
-                [1,0.51,'easeOutExpo'],
-                [0,0.75,'easeInQuad']
-            ]
-            exData['customData']['fakeColorNotes'][fakeIndex]['customData']['animation']['dissolveArrow'] = [
-                [0,0.5],
-                [1,0.51,'easeOutExpo'],
-                [0,0.75,'easeInQuad']
-            ]
-
-# Spawns fake notes at desired time (yes this uses a shitty track effect)
-def noteBloom(nTime, duration, amount, distance = 1):
-    trackName = str(rand.randint(0,90000000))
-    for index in range(amount):
-        fuck = rand.uniform(0.5,1.5)
-        fakeNoteLength = len(exData['customData']['fakeColorNotes'])
-
-        # note vision block test
-        pos = [rand.uniform(-10,10),rand.uniform(-10,10),rand.uniform(-15,5),0]
-        while not((abs(pos[0]) > distance) and (abs(pos[1]) > distance) and (abs(pos[2]) > distance)):
-            pos = [rand.uniform(-10,10),rand.uniform(-10,10),rand.uniform(-15,5),0]
-        
-        exData['customData']['fakeColorNotes'].append(dict(b=nTime,x=0,y=0,c=rand.randint(0,1),a=0,d=rand.randint(0,8),customData={}))
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['animation'] = {}
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['noteJumpStartBeatOffset'] = -10
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['disableNoteGravity'] = True
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['spawnEffect'] = False
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['uninteractable'] = True
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['track'] = trackName
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['color'] = [rand.uniform(0,1),rand.uniform(0,1),rand.uniform(0,1),1]  
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['animation']['offsetPosition'] = [
-            pos
-        ]
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['animation']['localRotation'] = [
-            [rand.randint(-90,90),rand.randint(-90,90),rand.randint(-90,90),0]
-        ]
-        exData['customData']['fakeColorNotes'][fakeNoteLength]['customData']['animation']['scale'] = [
-            [fuck,fuck,fuck,0]
-        ]
-    
-    #trackpart
-    dissolve(nTime-3, trackName, 0.25, 0,0)
-    dissolveArrow(nTime-3, trackName, 0.25, 0,0)
-
-    time(nTime-3,trackName,0,'easeOutQuad',0,0)
-    dissolve(nTime, trackName, 0.25, 0,1)
-    dissolveArrow(nTime, trackName, 0.25, 0,1)
-    posTweenObjekt(nTime,trackName, 1,'easeOutExpo',[0,-5,0,0],[0,0,0,1])
-
-    dissolve(nTime+duration, trackName, 0.5, 1,0)
-    dissolveArrow(nTime+duration, trackName, 0.5, 1,0)
-    time(nTime+duration+0.5,trackName,0,'easeOutQuad',1,1)
-    posTweenObjekt(nTime+duration,trackName, 0.5,'easeInExpo',[0,0,0,0],[0,10,0,1])
-
 
 # Makes the notes tween from random positions 
 def randMovements(startTime, endTime, noteOffset):
@@ -184,39 +101,6 @@ def trail(time):
             ]
             t+=0.01
 
-# Does a knockoff 'Oh no.' effect
-def ohYes(startTime, endTime):
-    for index in range(len(exData['colorNotes'])):
-        if (startTime <= exData['colorNotes'][index]['b']) and (endTime >= exData['colorNotes'][index]['b']):
-            exData['colorNotes'][index]['customData'] = {}
-            exData['colorNotes'][index]['customData']['animation'] = {}
-            exData['colorNotes'][index]['customData']['disableNoteGravity'] = True
-            exData['colorNotes'][index]['customData']['disableNoteLook'] = True
-            exData['colorNotes'][index]['customData']['noteJumpMovementSpeed'] = 0.01
-            exData['colorNotes'][index]['customData']['noteJumpStartBeatOffset'] = 2
-            exData['colorNotes'][index]['customData']['animation']['offsetPosition'] = [
-                [0,0,40,0],
-                [0,0,19,0.25,'easeOutExpo'],
-                [0,0,0,0.5,'easeInSine'],
-                [0,0,-20,0.75,'easeOutSine']
-            ]
-            exData['colorNotes'][index]['customData']['animation']['localRotation'] = [
-                [270,270,270,0],
-                [0,0,0,0.25,'easeOutExpo']
-            ]
-            exData['colorNotes'][index]['customData']['animation']['dissolve'] = [
-                [0,0],
-                [1,0.15],
-                [1,0.65],
-                [0,0.75]
-            ]
-            exData['colorNotes'][index]['customData']['animation']['dissolveArrow'] = [
-                [0,0],
-                [1,0.15],
-                [1,0.65],
-                [0,0.75]
-            ]
-
 # Makes the notes act like a tangent graph
 def tangent(startTime, endTime, offset):
     for index in range(len(exData['colorNotes'])):
@@ -244,30 +128,6 @@ def tangent(startTime, endTime, offset):
                 [abs(xAxis)/2,1,1,0.3,'easeInExpo'],
                 [abs(xAxis)/2,1,1,0.3],
                 [1,1,1,0.35,'easeOutExpo']
-            ]
-
-# Makes the notes tween from random positions 
-def rotationFly(startTime, endTime, noteOffset):
-    for index in range(len(exData['colorNotes'])):
-        if (startTime <= exData['colorNotes'][index]['b']) and (endTime >= exData['colorNotes'][index]['b']):
-            exData['colorNotes'][index]['customData'] = {}
-            exData['colorNotes'][index]['customData']['animation'] = {}
-            exData['colorNotes'][index]['customData']['noteJumpStartBeatOffset'] = noteOffset
-            exData['colorNotes'][index]['customData']['animation']['offsetWorldRotation'] = [
-                [rand.randint(-45,45),rand.randint(-45,45),rand.randint(-45,45),0],
-                [0,0,0,0.45,'easeOutQuad']
-            ]
-            exData['colorNotes'][index]['customData']['animation']['localtation'] = [
-                [rand.randint(-90,90),rand.randint(-90,90),rand.randint(-90,90),0.25],
-                [0,0,0,0.45,'easeOutQuad']
-            ]
-            exData['colorNotes'][index]['customData']['animation']['dissolve'] = [
-                [0,0.25],
-                [0.95,0.45]
-            ]
-            exData['colorNotes'][index]['customData']['animation']['dissolveArrow'] = [
-                [0.25,0],
-                [0.75,0.25]
             ]
 
 # Makes the notes go through a zig zag thing
@@ -1768,4 +1628,80 @@ def lazyNoteJump(startTime, endTime):
                 exData['colorNotes'][index]['customData'] = {}
 
             exData['colorNotes'][index]['customData']['flip'] = [rand.randint(-2,2), rand.randint(0,2)]
-            
+
+def rotationsEventsToArray(offset = 0):
+    """Returns a JSON of all rotation events in a map.
+    
+    This is the JSON format of each object
+    {
+        b = 5.0 // (float) Time in beats.
+        r = 15.0 // (float) Rotation in degrees
+    }
+    """
+    rotationEvents = []
+    rotation = 0
+
+    # yeah
+    for event in exData['rotationEvents']:
+        rotation += event['r']
+
+        # compiles rotation event and adds it to array
+        rotationEvents.append(dict(
+            b = event['b'] + offset,
+            r = rotation
+        ))
+
+    return rotationEvents
+
+def faltySishWrathWannabe(startTime, endTime):
+    for index in range(len(exData['colorNotes'])):
+        if (exData['colorNotes'][index]['b'] >= startTime) and (exData['colorNotes'][index]['b'] <= endTime):
+            note = exData['colorNotes'][index]
+
+            # you get the idea
+            if not('customData' in note):
+                exData['colorNotes'][index]['customData'] = {}
+
+            if not('animation' in note):
+                exData['colorNotes'][index]['customData']['animation'] = {}
+
+            # the fun stuff
+            aData = {}
+
+            aData['offsetPosition'] = [
+                [rand.uniform(-5,5),rand.uniform(-5,5),rand.uniform(-5,5),0],
+                [0,0,20,0.25,'easeOutQuint'],
+                [0,0,0,0.5,'easeInQuart'],
+                [0,0,-20,0.75,'easeOutQuart']
+            ]
+
+            aData['interactable'] = [
+                [0,0.25],
+                [1,0.3]
+            ]
+
+            aData['dissolve'] = [
+                [0,0],
+                [1,0.35,'easeOutQuart']
+            ]
+
+            aData['dissolveArrow'] = [
+                [0,0],
+                [1,0.35,'easeOutExpo']
+            ]
+
+            aData['localRotation'] = [
+                [rand.randint(-200, 200), rand.randint(-200, 200), 0, 0],
+                [0,0,0,0.35,'easeOutExpo']
+            ]
+
+            aData['offsetWorldRotation'] = [
+                [rand.randint(-5, 5), rand.randint(-5, 5), 0, 0],
+                [0,0,0,0.35,'easeOutQuint']
+            ]
+
+            # inject and repeat
+            exData['colorNotes'][index]['customData']['animation'] = aData 
+            exData['colorNotes'][index]['customData']['noteJumpMovementSpeed'] = 0.001   
+            exData['colorNotes'][index]['customData']['disableNoteGravity'] = True
+            exData['colorNotes'][index]['customData']['spawnEffect'] = False

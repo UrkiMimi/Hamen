@@ -54,9 +54,27 @@ def setup(original, export):
 
     # required arrays
     # to preserve bookmarks=
-    exData['customData'] = {}
+    if not('customData') in infDat:
+        exData['customData'] = {}
     exData['customData']['customEvents'] = []
 
+
+#region classes
+# i fucking hate colorama so i'm implementing it myself
+class debug_ASNIColor:
+    # styles
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+    # colors
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
 
 #region functions
 # for final exporting
@@ -67,12 +85,13 @@ def export_diff():
     ## data cleanup 
     # sort basic beatmap events
     for basic in ['colorNotes', 'basicBeatmapEvents', 'bombNotes', 'obstacles', 'burstSliders']:
-        exData[basic].sort(key=beat)
+        exData[basic].sort(key=_thisisaninternalfunctionforsortingplsdontuse_beat)
 
     # sort custom events
     for adv in ['fakeColorNotes', 'fakeBombNotes', 'customEvents', 'fakeBurstSliders', 'fakeObstacles']:
         if adv in exData['customData']:
-            exData['customData'][adv].sort(key=beat)
+            exData['customData'][adv].sort(key=_thisisaninternalfunctionforsortingplsdontuse_beat)
+
 
 
     # remove old backup
@@ -84,7 +103,7 @@ def export_diff():
     os.rename(exportName, exportName + '.bak')
 
     diPlusFile = open(exportName, 'w')
-    diPlusFile.write(json.dumps(exData, indent=2))
+    diPlusFile.write(json.dumps(_thisisaninternalfuncitonforfilesizeplsdontuse(exData, 4), indent=2))
     diPlusFile.close()
 
 #region info.dat part
@@ -119,7 +138,7 @@ def infoDat_addRequirement(requirement):
                 indexes = [index, index2]
 
     # customData check
-    if not('_customData' in infDat['_difficultyBeatmapSets'][index]['_difficultyBeatmaps'][index2]):
+    if not('_customData' in infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'][indexes[1]]):
         infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'][indexes[1]]['_customData'] = {}
     
     # set requirements to array argument
@@ -170,6 +189,9 @@ def infoDat_removeBaseMap():
     #pops base map
     infDat['_difficultyBeatmapSets'][indexes[0]]['_difficultyBeatmaps'].pop(indexes[1])
 
+#endregion
+
+
 def countUp():
     """So I don't lose my sanity
     Add this at the end of a modfile
@@ -193,6 +215,22 @@ def countUp():
     with open('count.txt', 'w') as f:
         f.write(str(counter))
         f.close()
+
+def debug_info():
+    """Dumps debugging information in the console 
+    Add this to the end of a modfile
+    """
+    # get info first
+    eventAmount = len(exData['customData']['customEvents'])
+    noteAmount = len(exData['colorNotes'] + exData['bombNotes'])
+    fakeNoteAmount = len(exData['customData']['fakeColorNotes'] + exData['customData']['fakeBombNotes'])
+    environmentAmount = len(exData['customData']['environment'])
+
+    print(f'{debug_ASNIColor.WHITE}{debug_ASNIColor.BOLD}\n---- {PRODID} / {VERSION} ----')
+    print(f'| Notes: {noteAmount} / Fake Notes: {fakeNoteAmount}')
+    print(f'| Environment: {environmentAmount} / Custom Events: {eventAmount}')
+    print(f'---- End of debug trace ---- \n{debug_ASNIColor.RESET}')
+
 
 def infoDat_settingsSetter(player = None, modifiers = None, chroma = None, cPlus = None, uiTweaks = None, nTweaks = None, graphics = None):
     # cjd
@@ -234,5 +272,16 @@ def infoDat_setEditedVersion():
     infDat['_customData']['_editors']['_lastEditedBy'] = PRODID
 
 # this is for file saving so please dont remove this (even though it looks stupid)
-def beat(e):
+def _thisisaninternalfunctionforsortingplsdontuse_beat(e):
     return e['b']
+
+def _thisisaninternalfuncitonforfilesizeplsdontuse(obj, ndigits=2):
+    if isinstance(obj, float):
+        return round(obj, ndigits)
+    if isinstance(obj, dict):
+        return {k: _thisisaninternalfuncitonforfilesizeplsdontuse(v, ndigits) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_thisisaninternalfuncitonforfilesizeplsdontuse(v, ndigits) for v in obj]
+    return obj
+
+#endregion

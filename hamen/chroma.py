@@ -50,7 +50,7 @@ def addPrimitiveModelTrack(type, material, position, localRotation, scale, track
         ))
 
 # adds geometry
-def addMaterial(shader, color, unlit, matName):
+def addMaterial(shader, color, matName):
     """Makes a new material for geometry 
     (Unlit materials will not work on 1.39+)
 
@@ -60,12 +60,9 @@ def addMaterial(shader, color, unlit, matName):
         unlit (bool): Use unlit shader (May not work on 1.39+)
         matName (string): Material name
     """
-    if not(unlit):
-        exData['customData']['materials'][matName] = dict(shader=shader,color=color)
-    else:
-        exData['customData']['materials'][matName] = dict(shader=shader,color=color,shaderKeywords=[])
+    exData['customData']['materials'][matName] = dict(shader=shader,color=color,shaderKeywords=[])
 
-
+# adds a custom ring rotation event
 def customRingRotation(time, rotation, step=15, prop=None, speed=1, namefilter=None, direction=None):
     """Custom ring rotation for V2 environments
 
